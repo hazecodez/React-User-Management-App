@@ -1,26 +1,21 @@
-const express = require('express');
-const cors = require('cors');
-const mongoose = require('mongoose');
-const app =express();
+//Database configuration
+const Mongoose = require('./Config/mongoDB_Config')
+Mongoose.Database()
 
-const userRoutes = require('./Routes/userRoutes')
-const adminRoutes = require('./Routes/adminRoutes')
+const express = require("express");
+const cors = require("cors");
+const app = express();
 
 app.use(express.json());
-app.use(express.urlencoded({extended : true}));
+app.use(express.urlencoded({ extended: true }));
 
+//Routes Setting
+const userRoutes = require("./Routes/userRoutes");
+const adminRoutes = require("./Routes/adminRoutes");
 
-// app.use('/', userRoutes);
-// app.use('/admin' , adminRoutes);
+app.use("/", userRoutes);
+app.use("/admin", adminRoutes);
 
-
-
-app.get('/',(req,res)=>{
-    res.json({
-        message: "Hello World !!"
-    })
-})
-
-app.listen(8000,()=>{
-    console.log(`Server running on ${'http://localhost:8000'}`);
-})
+app.listen(8000, () => {
+  console.log(`Server running on ${"http://localhost:8000"}`);
+});
