@@ -8,9 +8,8 @@ import { setUserDetails } from "../../Store/Slices/UserSlice";
 import { useDispatch } from "react-redux";
 
 function Signup() {
-
   const navigate = useNavigate();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   //States for input datas and alert controlling
 
@@ -37,6 +36,7 @@ function Signup() {
       } else if (password.trim() === "" || passAlert) {
         setPassAlert("Must fillout the field.");
       } else {
+        //pass userDetails to backend through API for save user data in DB
         const signUpResponse = await userSignUp({
           name,
           email,
@@ -44,20 +44,25 @@ function Signup() {
           password,
         });
         if (signUpResponse.data.status) {
-          localStorage.setItem('token',signUpResponse.data.token)
-          dispatch(setUserDetails({
-            id: signUpResponse.data.userData._id,
-            userName: signUpResponse.data.userData.userName,
-            email: signUpResponse.data.userData.email,
-            image: signUpResponse.data.userData.image,
-            mobile: signUpResponse.data.userData.mobile,
-            is_Admin: signUpResponse.data.userData.is_Admin
-          }))
+          //Set jwt token at localStorage
+          localStorage.setItem("token", signUpResponse.data.token);
+          //Set userDetails at redux store
+          dispatch(
+            setUserDetails({
+              id: signUpResponse.data.userData._id,
+              userName: signUpResponse.data.userData.userName,
+              email: signUpResponse.data.userData.email,
+              image: signUpResponse.data.userData.image,
+              mobile: signUpResponse.data.userData.mobile,
+              is_Admin: signUpResponse.data.userData.is_Admin,
+            })
+          );
           toast.success("Registration completed !", {
             position: toast.POSITION.TOP_RIGHT,
           });
-          navigate('/')
-          
+          setTimeout(() => {
+            navigate("/");
+          }, 5000);
         } else {
           toast.error(signUpResponse.data.alert, {
             position: toast.POSITION.TOP_RIGHT,

@@ -12,3 +12,12 @@ export async function userSignUp(signUpData) {
         console.log(error.message);
     }
 }
+
+export async function userLogIn(logInData) {
+    try {
+        const data = await UserApi.post('/login' , logInData);
+        return data
+    } catch (error) {
+        console.log(error.message);
+    }
+}
