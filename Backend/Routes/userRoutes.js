@@ -3,8 +3,7 @@ const userRoutes = express()
 const userController = require('../Controllers/userController')
 
 
-userRoutes.get('/',userController.home)
-userRoutes.post('/signup',userController.signup)
+userRoutes.post('/signup',userController.userRegistration)
 
 
 module.exports = userRoutes; 

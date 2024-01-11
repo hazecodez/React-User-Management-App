@@ -1,11 +1,19 @@
 import React, { useState } from "react";
 import { Card, Input, Button, Typography } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
-
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { userSignUp } from "../../Api/UserApi";
+import { setUserDetails } from "../../Store/Slices/UserSlice";
+import { useDispatch } from "react-redux";
 
 function Signup() {
+
   const navigate = useNavigate();
+  const dispatch = useDispatch()
+
+  //States for input datas and alert controlling
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [number, setNumber] = useState("");
@@ -16,6 +24,7 @@ function Signup() {
   const [passAlert, setPassAlert] = useState("");
 
   //Validation and data save to store (Signup handling)
+
   const signupHandle = async (e) => {
     e.preventDefault();
     try {
@@ -28,9 +37,36 @@ function Signup() {
       } else if (password.trim() === "" || passAlert) {
         setPassAlert("Must fillout the field.");
       } else {
-        console.log("settt");
+        const signUpResponse = await userSignUp({
+          name,
+          email,
+          number,
+          password,
+        });
+        if (signUpResponse.data.status) {
+          localStorage.setItem('token',signUpResponse.data.token)
+          dispatch(setUserDetails({
+            id: signUpResponse.data.userData._id,
+            userName: signUpResponse.data.userData.userName,
+            email: signUpResponse.data.userData.email,
+            image: signUpResponse.data.userData.image,
+            mobile: signUpResponse.data.userData.mobile,
+            is_Admin: signUpResponse.data.userData.is_Admin
+          }))
+          toast.success("Registration completed !", {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+          navigate('/')
+          
+        } else {
+          toast.error(signUpResponse.data.alert, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   return (
@@ -173,6 +209,7 @@ function Signup() {
           </Typography>
         </form>
       </Card>
+      <ToastContainer />
     </div>
   );
 }

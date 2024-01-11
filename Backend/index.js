@@ -1,6 +1,6 @@
 //Database configuration
-const Mongoose = require('./Config/mongoDB_Config')
-Mongoose.Database()
+const Mongoose = require("./Config/mongoDB_Config");
+Mongoose.Database();
 
 const express = require("express");
 const cors = require("cors");
@@ -8,6 +8,15 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+//Securing requests by cors
+app.use(
+  cors({
+    origin: ["http://localhost:5173"],
+    methods: ["GET", "POST"],
+    credentials: true,
+  })
+);
 
 //Routes Setting
 const userRoutes = require("./Routes/userRoutes");
