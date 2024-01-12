@@ -45,19 +45,37 @@ exports.loginUser = async (req, res) => {
         let token = jwt.sign({ userId: exist._id }, process.env.SECRET_TOKEN, {
           expiresIn: "1h",
         });
-        res.json( {
-          userLoginData : exist,
-          status : true,
-          err : null,
-          token
-        } )
+        res.json({
+          userLoginData: exist,
+          status: true,
+          err: null,
+          token,
+        });
       } else {
-        res.json( { err: "pass", alert: "Wrong password ! Enter valid password." } )
+        res.json({
+          err: "pass",
+          alert: "Wrong password ! Enter valid password.",
+        });
       }
     } else {
-      res.json({ err: "email", alert: "Account isn't exist, please register." });
+      res.json({
+        err: "email",
+        alert: "Account isn't exist, please register.",
+      });
     }
   } catch (error) {
     console.log(error.message);
   }
+};
+
+exports.imageUpload = async (req, res) => {
+  const id = req.body.userId;
+  const image = req.file.filename;
+  const imageUpdate = await User.findOneAndUpdate(
+    { _id: id },
+    { $set: { image: image } },
+    { new: true }
+  ).then((response) => {
+    res.json({ updated: true, data: response });
+  });
 };
