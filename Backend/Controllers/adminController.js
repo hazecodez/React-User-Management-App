@@ -7,7 +7,7 @@ require('dotenv').config()
 exports.login = async(req,res) =>{
     try {
         const {email,password} = req.body;
-        const exist = await User.findOne({ email : email});
+        const exist = await User?.findOne({ email : email});
         if(exist) {
             if(exist.is_Admin) {
                 const compare = await bcrypt.compare(password,exist.password);
@@ -26,6 +26,32 @@ exports.login = async(req,res) =>{
             }
         } else {
             res.json({ err:"email", alert: "Email not exist." })
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+exports.loadUsers = async (req,res) => {
+    try {
+        const userData = await User?.find({ is_Admin : false });
+        if(userData) {
+            res.json({ status: true , userData })
+        } else {
+            res.json({ status : false })
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+exports.deleteUser = async (req,res) => {
+    try {
+        const deleted = await User?.deleteOne({ _id : req.body.userId });
+        if(deleted) {
+            res.json({ status : true })
+        } else {
+            res.json({ status : false })
         }
     } catch (error) {
         console.log(error.message);

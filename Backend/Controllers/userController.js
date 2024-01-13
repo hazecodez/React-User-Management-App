@@ -71,7 +71,7 @@ exports.loginUser = async (req, res) => {
 exports.imageUpload = async (req, res) => {
   const id = req.body.userId;
   const image = req.file.filename;
-  const imageUpdate = await User.findOneAndUpdate(
+  const imageUpdate = await User?.findOneAndUpdate(
     { _id: id },
     { $set: { image: image } },
     { new: true }

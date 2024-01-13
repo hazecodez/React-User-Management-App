@@ -12,3 +12,21 @@ export async function AdminLogin(LoginData) {
         console.log(error.message);
     }
 }
+
+export async function LoadUserList () {
+    try {
+        const listResponse = AdminApi.get('/loadUsers')
+        return listResponse
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+export async function DeleteUser (userId) {
+    try {
+        const deleteResponse = AdminApi.post('/deleteUser', {userId})
+        return deleteResponse;
+    } catch (error) {
+        console.log(error.message);
+    }
+}

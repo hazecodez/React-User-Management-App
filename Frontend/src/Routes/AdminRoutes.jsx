@@ -1,21 +1,51 @@
-import React from 'react'
-import { Route , Routes } from 'react-router-dom'
-import Login from '../Pages/Admin/Login'
-import Home from '../Pages/Admin/Home'
-import AddUserPage from '../Pages/Admin/AddUserPage'
-import EditUserPage from '../Pages/Admin/EditUserPage'
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+import Login from "../Pages/Admin/Login";
+import Home from "../Pages/Admin/Home";
+import AddUserPage from "../Pages/Admin/AddUserPage";
+import EditUserPage from "../Pages/Admin/EditUserPage";
+import AdminProtect from "./AdminProtect";
+import AdminPublic from "./AdminPublic";
 
 function AdminRoutes() {
   return (
     <div>
       <Routes>
-        <Route path='/' element={ <Login/> } />
-        <Route path='/dashboard' element={ <Home/> } />
-        <Route path='/addUser' element={ <AddUserPage/> } />
-        <Route path='/editUser' element={ <EditUserPage/> } />
+        <Route
+          path="/"
+          element={
+            <AdminPublic>
+              <Login />
+            </AdminPublic>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <AdminProtect>
+              <Home />
+            </AdminProtect>
+          }
+        />
+        <Route
+          path="/addUser"
+          element={
+            <AdminProtect>
+              <AddUserPage />
+            </AdminProtect>
+          }
+        />
+        <Route
+          path="/editUser"
+          element={
+            <AdminProtect>
+              <EditUserPage />
+            </AdminProtect>
+          }
+        />
       </Routes>
     </div>
-  )
+  );
 }
 
-export default AdminRoutes
+export default AdminRoutes;
