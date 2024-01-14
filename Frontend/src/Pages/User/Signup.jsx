@@ -96,8 +96,8 @@ function Signup() {
               value={name}
               onChange={(e) => {
                 setName(e.target.value);
-                if (e.target.value.length < 4 || e.target.value.trim() === "") {
-                  setNameAlert("Username must be 4 letters.");
+                if (e.target.value.length < 4) {
+                  setNameAlert("Username must be 4 letters or above.");
                 } else {
                   setNameAlert("");
                 }

@@ -18,12 +18,12 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { DeleteUser } from "../../Api/AdminApi";
 
-const TABLE_HEAD = ["No.", "User Name", "Email", "Mobile", "Edit", "Delete",];
+const TABLE_HEAD = ["No.", "User Name", "Email", "Mobile", "Edit", "Delete"];
 
 function UserList() {
   const [userList, setUser] = useState([]);
   const [search, setSearch] = useState("");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   //===User list fetching from DB======================
 
@@ -40,29 +40,31 @@ function UserList() {
 
   //===Data fetching by search==========================
 
-  const userData = userList.filter((user)=> {
+  const userData = userList.filter((user) => {
     const searchLower = search.toLowerCase();
     const emailMatch = user.email.toLowerCase().includes(searchLower);
     const nameMatch = user.userName.toLowerCase().includes(searchLower);
     const mobileMatch = user.mobile.toString().includes(searchLower);
-    return emailMatch || nameMatch || mobileMatch
-  })
+    return emailMatch || nameMatch || mobileMatch;
+  });
 
   //===Delete user=======================================
-   const deleteUser = async(userId) => {
-    DeleteUser(userId).then((res)=> {
-      setUser(userList.filter((user=> user._id !== userId)));
-      toast.success("User Deleted !", {
-        position: toast.POSITION.TOP_RIGHT,
+  const deleteUser = async (userId) => {
+    DeleteUser(userId)
+      .then((res) => {
+        setUser(userList.filter((user) => user._id !== userId));
+        toast.success("User Deleted !", {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      })
+      .catch((err) => {
+        console.log(err.message);
       });
-    }).catch((err)=>{
-      console.log(err.message);
-    })
-   }
+  };
 
   return (
     <div className="mx-auto max-w-screen-2xl px-4 py-2 lg:px-8 lg:py-4">
-      <ToastContainer/>
+      <ToastContainer />
       <Card className="h-full w-full">
         <CardHeader floated={false} shadow={false} className="rounded-none">
           <div className="mb-4 flex flex-col justify-between gap-8 md:flex-row md:items-center">
@@ -77,10 +79,14 @@ function UserList() {
                   label="Search User"
                   icon={<MagnifyingGlassIcon className="h-5 w-5" />}
                   value={search}
-                  onChange={(e)=> setSearch(e.target.value)}
+                  onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
-              <Button className="flex items-center gap-3" size="sm">
+              <Button
+                onClick={() => navigate("/admin/addUser")}
+                className="flex items-center gap-3"
+                size="sm"
+              >
                 <UserPlusIcon strokeWidth={2} className="h-5 w-5" /> Add User
               </Button>
             </div>
@@ -160,7 +166,12 @@ function UserList() {
                     </td>
                     <td className="p-4 border-b border-blue-gray-50">
                       <Tooltip content="Edit User">
-                        <IconButton variant="text">
+                        <IconButton
+                          variant="text"
+                          onClick={() =>
+                            navigate(`/admin/editUser/${user._id}`)
+                          }
+                        >
                           <PencilIcon className="h-4 w-4" />
                         </IconButton>
                       </Tooltip>
@@ -168,7 +179,10 @@ function UserList() {
 
                     <td className="p-4 border-b border-blue-gray-50">
                       <Tooltip content="Delete User">
-                        <IconButton variant="text" onClick={()=> deleteUser(user._id)}>
+                        <IconButton
+                          variant="text"
+                          onClick={() => deleteUser(user._id)}
+                        >
                           <TrashIcon className="h-4 w-4" />
                         </IconButton>
                       </Tooltip>
@@ -179,37 +193,37 @@ function UserList() {
             </tbody>
           </table>
         </CardBody>
-        {/* <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
-        <Button variant="outlined" size="sm">
-          Previous
-        </Button>
-        <div className="flex items-center gap-2">
-          <IconButton variant="outlined" size="sm">
-            1
-          </IconButton>
-          <IconButton variant="text" size="sm">
-            2
-          </IconButton>
-          <IconButton variant="text" size="sm">
-            3
-          </IconButton>
-          <IconButton variant="text" size="sm">
-            ...
-          </IconButton>
-          <IconButton variant="text" size="sm">
-            8
-          </IconButton>
-          <IconButton variant="text" size="sm">
-            9
-          </IconButton>
-          <IconButton variant="text" size="sm">
-            10
-          </IconButton>
-        </div>
-        <Button variant="outlined" size="sm">
-          Next
-        </Button>
-      </CardFooter> */}
+        <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
+          <Button variant="outlined" size="sm">
+            Previous
+          </Button>
+          <div className="flex items-center gap-2">
+            <IconButton variant="outlined" size="sm">
+              1
+            </IconButton>
+            <IconButton variant="text" size="sm">
+              2
+            </IconButton>
+            <IconButton variant="text" size="sm">
+              3
+            </IconButton>
+            <IconButton variant="text" size="sm">
+              ...
+            </IconButton>
+            <IconButton variant="text" size="sm">
+              8
+            </IconButton>
+            <IconButton variant="text" size="sm">
+              9
+            </IconButton>
+            <IconButton variant="text" size="sm">
+              10
+            </IconButton>
+          </div>
+          <Button variant="outlined" size="sm">
+            Next
+          </Button>
+        </CardFooter>
       </Card>
     </div>
   );

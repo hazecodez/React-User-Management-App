@@ -36,7 +36,7 @@ function AdminRoutes() {
           }
         />
         <Route
-          path="/editUser"
+          path="/editUser/:id"
           element={
             <AdminProtect>
               <EditUserPage />
